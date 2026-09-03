@@ -5,11 +5,19 @@ load_dotenv()
 
 client = OpenAI()
 
-response = client.responses.create(
-    model="gpt-5.4-mini",
-    input="Explica en una frase qué es una regresión lineal."
-)
-
-print(response.output_text)
-
 print("Statistics AI Tutor")
+
+while True:
+
+    question = input("Tu pregunta: ")
+
+    if question.lower() == "salir":
+        break
+
+    response = client.responses.create(
+        model="gpt-5.4-mini",
+        input=question
+    )
+
+    print(response.output_text)
+
