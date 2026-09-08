@@ -1,0 +1,34 @@
+from embeddings import create_embedding, create_embeddings
+from similarity import cosine_similarity
+from document_loader import load_pdf
+from text_splitter import chunk_pages
+
+def retrieve_relevant_chunks(query, chunks, top_k=3):
+    query_embedding = create_embedding(query)
+
+    chunk_texts = [chunk["text"] for chunk in chunks]
+    chunk_embeddings = create_embeddings(chunk_texts)
+
+    results = []
+
+    for chunk, chunk_embedding in zip(chunks, chunk_embeddings):
+        similarity = cosine_similarity(query_embedding, chunk_embedding)
+
+        result = {
+            "chunk": chunk,
+            "similarity": similarity
+        }
+
+        results.append(result)
+    results.sort(key=lambda x: x["similarity"], reverse=True)
+    return results[:top_k]
+
+if __name__ == "__main__":
+    pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
+    chunks = chunk_pages(pages, chunk_size=500, overlap=100)
+
+    test_query = "¿Qué significa el intercepto beta cero?"
+    test_results = retrieve_relevant_chunks(test_query, chunks, top_k=3)
+
+    print(test_results)
+          

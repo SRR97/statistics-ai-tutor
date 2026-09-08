@@ -24,6 +24,7 @@ def load_pdf(pdf_path):
 
     return pages
 
-document_pages = load_pdf(pdf_path) 
+if __name__ == "__main__":
+    document_pages = load_pdf(pdf_path) 
 
-print(document_pages[1]["page_number"])
+    print(document_pages[1]["page_number"])
