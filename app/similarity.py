@@ -8,11 +8,13 @@ def cosine_similarity(vector_a, vector_b):
     similarity = dot_product / (norm_a * norm_b)
     return similarity
 
-text_1 = "¿Qué es una regresión lineal?"
-text_2 = "Los planetas orbitan alrededor del Sol."
+if __name__ == "__main__":
 
-embedding_1 = create_embedding(text_1)
-embedding_2 = create_embedding(text_2)
+    text_1 = "¿Qué es una regresión lineal?"
+    text_2 = "Los planetas orbitan alrededor del Sol."
 
-result = cosine_similarity(embedding_1, embedding_2)
-print(result)
+    embedding_1 = create_embedding(text_1)
+    embedding_2 = create_embedding(text_2)
+
+    result = cosine_similarity(embedding_1, embedding_2)
+    print(result)
