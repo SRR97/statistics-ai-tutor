@@ -3,7 +3,7 @@ from similarity import cosine_similarity
 from document_loader import load_pdf
 from text_splitter import chunk_pages
 
-def retrieve_relevant_chunks(query, chunks, top_k=3):
+def retrieve_relevant_chunks(query, chunks, top_k=3, similarity_threshold=0.40):
     query_embedding = create_embedding(query)
 
     chunk_texts = [chunk["text"] for chunk in chunks]
@@ -19,7 +19,9 @@ def retrieve_relevant_chunks(query, chunks, top_k=3):
             "similarity": similarity
         }
 
-        results.append(result)
+        if similarity >= similarity_threshold:
+            results.append(result)
+
     results.sort(key=lambda x: x["similarity"], reverse=True)
     return results[:top_k]
 
@@ -27,8 +29,9 @@ if __name__ == "__main__":
     pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
     chunks = chunk_pages(pages, chunk_size=500, overlap=100)
 
-    test_query = "¿Qué significa el intercepto beta cero?"
+    test_query = "¿Qué es una red neuronal convolucional?"
     test_results = retrieve_relevant_chunks(test_query, chunks, top_k=3)
 
     print(test_results)
           
+    

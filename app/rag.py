@@ -8,6 +8,10 @@ client = OpenAI()
 def generate_rag_answer(query, chunks):
 
     relevant_chunks = retrieve_relevant_chunks(query, chunks, top_k=3)
+
+    if not relevant_chunks:
+        return "No hay información suficiente en los apuntes proporcionados para responder la pregunta."
+    
     context_parts = []
 
     for result in relevant_chunks:
@@ -37,7 +41,7 @@ if __name__ == "__main__":
     pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
     chunks = chunk_pages(pages, chunk_size=500, overlap=100)
 
-    test_query = "¿Cómo se interpreta el coeficiente beta uno?"
+    test_query = "¿Qué es una red neuronal convolucional?"
     answer = generate_rag_answer(test_query, chunks)
 
     print(answer)
