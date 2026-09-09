@@ -1,4 +1,6 @@
 from retriever import retrieve_relevant_chunks
+from document_loader import load_pdf
+from text_splitter import chunk_pages
 from openai import OpenAI
 
 client = OpenAI()
@@ -15,3 +17,27 @@ def generate_rag_answer(query, chunks):
         text = chunk["text"]
         context_part = f"Página {page_number}:\n{text}"
         context_parts.append(context_part)
+        
+    context = "\n\n".join(context_parts)
+    system_prompt = "Eres un tutor académico de Estadística. Responde utilizando únicamente la información proporcionada en el contexto."
+    system_prompt += " Si el contexto no contiene información suficiente para responder la pregunta, indica claramente que no hay información suficiente en los apuntes proporcionados."
+    system_prompt += " Indica siempre la página o páginas del contexto utilizadas para elaborar la respuesta."
+
+    user_prompt = f"Contexto:\n{context}\n\nPregunta:\n{query}"
+
+    response = client.responses.create(
+        model="gpt-5.4-mini",
+        instructions=system_prompt,
+        input=user_prompt
+    )
+
+    return response.output_text
+
+if __name__ == "__main__":
+    pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
+    chunks = chunk_pages(pages, chunk_size=500, overlap=100)
+
+    test_query = "¿Cómo se interpreta el coeficiente beta uno?"
+    answer = generate_rag_answer(test_query, chunks)
+
+    print(answer)
