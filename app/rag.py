@@ -50,7 +50,11 @@ if __name__ == "__main__":
     chunk_texts = [chunk["text"] for chunk in chunks]
     chunk_embeddings = create_embeddings(chunk_texts)
 
-    test_query = "¿Cómo se interpreta el coeficiente beta uno?"
-    answer = generate_rag_answer(test_query, chunks, chunk_embeddings)
+    while True:
+        query = input("Tu pregunta: ")
 
-    print(answer)
+        if query.lower() == "salir":
+            break
+
+        answer = generate_rag_answer(query, chunks, chunk_embeddings)
+        print(answer)
