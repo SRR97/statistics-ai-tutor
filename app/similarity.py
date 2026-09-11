@@ -1,5 +1,5 @@
 import numpy as np
-from embeddings import create_embedding
+from app.embeddings import create_embedding
 
 def cosine_similarity(vector_a, vector_b):
     dot_product = np.dot(vector_a, vector_b)

@@ -1,7 +1,7 @@
-from retriever import retrieve_relevant_chunks
-from document_loader import load_pdf
-from text_splitter import chunk_pages
-from embeddings import create_embeddings
+from app.retriever import retrieve_relevant_chunks
+from app.document_loader import load_pdf
+from app.text_splitter import chunk_pages
+from app.embeddings import create_embeddings
 from openai import OpenAI
 
 client = OpenAI()
