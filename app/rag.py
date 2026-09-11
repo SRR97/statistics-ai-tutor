@@ -6,6 +6,15 @@ from openai import OpenAI
 
 client = OpenAI()
 
+def initialize_rag():
+    pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
+    chunks = chunk_pages(pages, chunk_size=500, overlap=100)
+
+    chunk_texts = [chunk["text"] for chunk in chunks]
+    chunk_embeddings = create_embeddings(chunk_texts)
+
+    return chunks, chunk_embeddings
+
 def generate_rag_answer(query, chunks, chunk_embeddings):
 
     relevant_chunks = retrieve_relevant_chunks(
@@ -44,11 +53,8 @@ def generate_rag_answer(query, chunks, chunk_embeddings):
     return response.output_text
 
 if __name__ == "__main__":
-    pages = load_pdf("data/Clase_2_Análisis_de_regresión.pdf")
-    chunks = chunk_pages(pages, chunk_size=500, overlap=100)
-
-    chunk_texts = [chunk["text"] for chunk in chunks]
-    chunk_embeddings = create_embeddings(chunk_texts)
+    
+    chunks, chunk_embeddings = initialize_rag()
 
     while True:
         query = input("Tu pregunta: ")
