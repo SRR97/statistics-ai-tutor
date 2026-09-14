@@ -1,7 +1,7 @@
-from embeddings import create_embedding, create_embeddings
-from similarity import cosine_similarity
-from document_loader import load_pdf
-from text_splitter import chunk_pages
+from app.embeddings import create_embedding, create_embeddings
+from app.similarity import cosine_similarity
+from app.document_loader import load_pdf
+from app.text_splitter import chunk_pages
 
 def retrieve_relevant_chunks(query, chunks, chunk_embeddings, top_k=3, similarity_threshold=0.40):
     query_embedding = create_embedding(query)
