@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.rag import initialize_rag, generate_rag_answer
 from pydantic import BaseModel
+from app.web import get_chat_page
 
 app = FastAPI()
 
@@ -16,6 +17,10 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/chat")
+def chat():
+    return get_chat_page()
 
 @app.post("/ask")
 def ask(request: QuestionRequest):
