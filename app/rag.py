@@ -1,5 +1,5 @@
 from app.retriever import retrieve_relevant_chunks
-from app.document_loader import load_pdf
+from app.document_loader import load_pdfs_from_directory
 from app.text_splitter import chunk_pages
 from app.embeddings import create_embeddings
 from openai import OpenAI

@@ -15,10 +15,12 @@ def chunk_pages(pages, chunk_size, overlap):
     for page in pages:
         page_text = page["text"]
         page_number = page["page_number"]
+        document_name = page["document"]
         page_chunks = chunk_text(page_text, chunk_size, overlap)
 
         for chunk_number, chunk in enumerate(page_chunks, start=1):
             chunk_data = {
+                "document": document_name,
                 "page_number": page_number,
                 "chunk_number": chunk_number,
                 "text": chunk
