@@ -16,17 +16,91 @@ def get_chat_page():
             background-color: #f5f7fa;
             
         }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        #question {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 12px 18px;
+            background-color: #2563eb;
+            border-radius: 8px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        #chat {
+            margin-top: 25px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background-color: #2563eb;
+            color: white;
+            max-width: 70%;
+            margin-left: auto;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 18px;
+        }
+
+        .tutor-message {
+            background-color: #f3f4f6;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+    
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            }
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
 </head>
+
 <body>
 
-<h1>Statistics AI Tutor</h1>
+<div class="chat-container">
 
-<input id="question" type="text" placeholder="Escribe tu pregunta aquí" onkeydown="if(event.key === 'Enter') askQuestion()">
-<button onclick="askQuestion()">Preguntar</button>
+    <h1>Statistics AI Tutor</h1>
 
-<div id="chat"></div>
+    <input id="question" type="text" placeholder="Escribe tu pregunta aquí" onkeydown="if(event.key === 'Enter') askQuestion()">
+    <button onclick="askQuestion()">Preguntar</button>
+
+    <div id="chat"></div>
+
+</div>
 
 <script>
 async function askQuestion() {
@@ -48,8 +122,15 @@ async function askQuestion() {
 
     const data = await response.json();
 
-    document.getElementById("chat").innerText += "Tú: " + question + "\\n";
-    document.getElementById("chat").innerText += "Tutor: " + data.answer + "\\n\\n";
+    const userMessage = document.createElement("div");
+    userMessage.className = "user-message";
+    userMessage.innerText = "Tú: " + question;
+    document.getElementById("chat").appendChild(userMessage);
+    const tutorMessage = document.createElement("div");
+    tutorMessage.className = "tutor-message";
+    tutorMessage.innerHTML = "<strong>Tutor:</strong> " + marked.parse(data.answer);
+    document.getElementById("chat").appendChild(tutorMessage);
+    MathJax.typesetPromise([tutorMessage]);
 
     document.getElementById("question").value = "";
 }
