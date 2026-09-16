@@ -130,6 +130,10 @@ async function askQuestion() {
         })
     });
 
+    if (!response.ok) {
+    throw new Error("Error en la respuesta del servidor");
+    }
+
     const data = await response.json();
 
     const userMessage = document.createElement("div");
