@@ -96,7 +96,7 @@ def get_chat_page():
     <h1>Statistics AI Tutor</h1>
 
     <input id="question" type="text" placeholder="Escribe tu pregunta aquí" onkeydown="if(event.key === 'Enter') askQuestion()">
-    <button onclick="askQuestion()">Preguntar</button>
+    <button id="ask-button" onclick="askQuestion()">Preguntar</button>
 
     <div id="chat"></div>
 
@@ -105,10 +105,20 @@ def get_chat_page():
 <script>
 async function askQuestion() {
     const question = document.getElementById("question").value;
+    const askButton = document.getElementById("ask-button");
+
+    if (askButton.disabled) {
+    return;
+    }
 
     if (question.trim() === "") {
         return;
     }
+
+    askButton.innerText = "Pensando...";
+    askButton.disabled = true;
+
+    try {
 
     const response = await fetch("/ask", {
         method: "POST",
@@ -131,8 +141,18 @@ async function askQuestion() {
     tutorMessage.innerHTML = "<strong>Tutor:</strong> " + marked.parse(data.answer);
     document.getElementById("chat").appendChild(tutorMessage);
     MathJax.typesetPromise([tutorMessage]);
+    
 
     document.getElementById("question").value = "";
+    askButton.innerText = "Preguntar";
+    askButton.disabled = false;
+    document.getElementById("question").focus();
+
+    } catch (error) {
+        alert("Ocurrió un error al comunicarse con el tutor.");
+        askButton.innerText = "Preguntar";
+        askButton.disabled = false;
+}
 }
 </script>
 
