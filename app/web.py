@@ -41,6 +41,7 @@ def get_chat_page():
         #chat {
             margin-bottom: 25px;
             line-height: 1.5;
+            min-height: 80px;
         }
 
         .user-message {
