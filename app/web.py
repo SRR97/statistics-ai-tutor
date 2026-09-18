@@ -61,6 +61,10 @@ def get_chat_page():
             margin-top: 10px;
         }
 
+        .loading-message {
+            display: inline-block;
+        }
+
         .input-area {
             display: flex;
             gap: 8px;
@@ -142,6 +146,11 @@ def get_chat_page():
             userMessage.innerText = question;
             document.getElementById("chat").appendChild(userMessage);
 
+            const loadingMessage = document.createElement("div");
+            loadingMessage.className = "tutor-message loading-message";
+            loadingMessage.innerText = "Pensando...";
+            document.getElementById("chat").appendChild(loadingMessage);
+
             try {
                 const response = await fetch("/ask", {
                     method: "POST",
@@ -158,6 +167,8 @@ def get_chat_page():
                 }
 
                 const data = await response.json();
+
+                loadingMessage.remove();
 
                 const tutorMessage = document.createElement("div");
                 tutorMessage.className = "tutor-message";
