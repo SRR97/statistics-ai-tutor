@@ -137,6 +137,11 @@ def get_chat_page():
             askButton.innerText = "Pensando...";
             askButton.disabled = true;
 
+            const userMessage = document.createElement("div");
+            userMessage.className = "user-message";
+            userMessage.innerText = question;
+            document.getElementById("chat").appendChild(userMessage);
+
             try {
                 const response = await fetch("/ask", {
                     method: "POST",
@@ -153,11 +158,6 @@ def get_chat_page():
                 }
 
                 const data = await response.json();
-
-                const userMessage = document.createElement("div");
-                userMessage.className = "user-message";
-                userMessage.innerText = question;
-                document.getElementById("chat").appendChild(userMessage);
 
                 const tutorMessage = document.createElement("div");
                 tutorMessage.className = "tutor-message";
