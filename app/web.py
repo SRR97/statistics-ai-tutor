@@ -42,6 +42,8 @@ def get_chat_page():
             margin-bottom: 25px;
             line-height: 1.5;
             min-height: 80px;
+            max-height: 500px;
+            overflow-y: auto;
         }
 
         .user-message {
@@ -154,6 +156,8 @@ def get_chat_page():
             userMessage.innerText = question;
             document.getElementById("chat").appendChild(userMessage);
 
+            document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
+
             document.getElementById("question").value = "";
 
             const loadingMessage = document.createElement("div");
@@ -184,6 +188,9 @@ def get_chat_page():
                 tutorMessage.className = "tutor-message";
                 tutorMessage.innerHTML = marked.parse(data.answer);
                 document.getElementById("chat").appendChild(tutorMessage);
+                
+                document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
+                
 
                 MathJax.typesetPromise([tutorMessage]);
 
