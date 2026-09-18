@@ -146,6 +146,8 @@ def get_chat_page():
             userMessage.innerText = question;
             document.getElementById("chat").appendChild(userMessage);
 
+            document.getElementById("question").value = "";
+
             const loadingMessage = document.createElement("div");
             loadingMessage.className = "tutor-message loading-message";
             loadingMessage.innerText = "Pensando...";
@@ -177,7 +179,6 @@ def get_chat_page():
 
                 MathJax.typesetPromise([tutorMessage]);
 
-                document.getElementById("question").value = "";
                 askButton.innerText = "Enviar";
                 askButton.disabled = false;
                 document.getElementById("question").focus();
