@@ -1,5 +1,6 @@
 from fastapi.responses import HTMLResponse
 
+
 def get_chat_page():
     return HTMLResponse(
         content="""
@@ -9,12 +10,12 @@ def get_chat_page():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistics AI Tutor</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             background-color: #f5f7fa;
-            
         }
 
         .chat-container {
@@ -30,8 +31,43 @@ def get_chat_page():
             margin-top: 0;
         }
 
+        .subtitle {
+            color: #6b7280;
+            margin-top: -8px;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        #chat {
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background-color: #2563eb;
+            color: white;
+            max-width: 70%;
+            width: fit-content;
+            margin-left: auto;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 18px;
+        }
+
+        .tutor-message {
+            background-color: #f3f4f6;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 8px;
+        }
+
         #question {
-            width: 70%;
+            flex: 1;
             padding: 12px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
@@ -49,29 +85,6 @@ def get_chat_page():
         button:hover {
             background-color: #1d4ed8;
         }
-
-        #chat {
-            margin-top: 25px;
-            line-height: 1.5;
-        }
-
-        .user-message {
-            background-color: #2563eb;
-            color: white;
-            max-width: 70%;
-            margin-left: auto;
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin-top: 18px;
-        }
-
-        .tutor-message {
-            background-color: #f3f4f6;
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin-top: 10px;
-        }
-    
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -86,80 +99,85 @@ def get_chat_page():
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
 </head>
 
 <body>
+    <div class="chat-container">
+        <h1>Statistics AI Tutor</h1>
+        <p class="subtitle">
+            Tutor académico de Estadística basado en los materiales de tu curso
+        </p>
 
-<div class="chat-container">
+        <div id="chat"></div>
 
-    <h1>Statistics AI Tutor</h1>
+        <div class="input-area">
+            <input
+                id="question"
+                type="text"
+                placeholder="Escribe tu pregunta aquí"
+                onkeydown="if(event.key === 'Enter') askQuestion()"
+            >
+            <button id="ask-button" onclick="askQuestion()">Enviar</button>
+        </div>
+    </div>
 
-    <input id="question" type="text" placeholder="Escribe tu pregunta aquí" onkeydown="if(event.key === 'Enter') askQuestion()">
-    <button id="ask-button" onclick="askQuestion()">Preguntar</button>
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById("question").value;
+            const askButton = document.getElementById("ask-button");
 
-    <div id="chat"></div>
+            if (askButton.disabled) {
+                return;
+            }
 
-</div>
+            if (question.trim() === "") {
+                return;
+            }
 
-<script>
-async function askQuestion() {
-    const question = document.getElementById("question").value;
-    const askButton = document.getElementById("ask-button");
+            askButton.innerText = "Pensando...";
+            askButton.disabled = true;
 
-    if (askButton.disabled) {
-    return;
-    }
+            try {
+                const response = await fetch("/ask", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        question: question
+                    })
+                });
 
-    if (question.trim() === "") {
-        return;
-    }
+                if (!response.ok) {
+                    throw new Error("Error en la respuesta del servidor");
+                }
 
-    askButton.innerText = "Pensando...";
-    askButton.disabled = true;
+                const data = await response.json();
 
-    try {
+                const userMessage = document.createElement("div");
+                userMessage.className = "user-message";
+                userMessage.innerText = question;
+                document.getElementById("chat").appendChild(userMessage);
 
-    const response = await fetch("/ask", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            question: question
-        })
-    });
+                const tutorMessage = document.createElement("div");
+                tutorMessage.className = "tutor-message";
+                tutorMessage.innerHTML = marked.parse(data.answer);
+                document.getElementById("chat").appendChild(tutorMessage);
 
-    if (!response.ok) {
-    throw new Error("Error en la respuesta del servidor");
-    }
+                MathJax.typesetPromise([tutorMessage]);
 
-    const data = await response.json();
+                document.getElementById("question").value = "";
+                askButton.innerText = "Enviar";
+                askButton.disabled = false;
+                document.getElementById("question").focus();
 
-    const userMessage = document.createElement("div");
-    userMessage.className = "user-message";
-    userMessage.innerText = "Tú: " + question;
-    document.getElementById("chat").appendChild(userMessage);
-    const tutorMessage = document.createElement("div");
-    tutorMessage.className = "tutor-message";
-    tutorMessage.innerHTML = "<strong>Tutor:</strong> " + marked.parse(data.answer);
-    document.getElementById("chat").appendChild(tutorMessage);
-    MathJax.typesetPromise([tutorMessage]);
-    
-
-    document.getElementById("question").value = "";
-    askButton.innerText = "Preguntar";
-    askButton.disabled = false;
-    document.getElementById("question").focus();
-
-    } catch (error) {
-        alert("Ocurrió un error al comunicarse con el tutor.");
-        askButton.innerText = "Preguntar";
-        askButton.disabled = false;
-}
-}
-</script>
-
+            } catch (error) {
+                alert("Ocurrió un error al comunicarse con el tutor.");
+                askButton.innerText = "Enviar";
+                askButton.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
 """
