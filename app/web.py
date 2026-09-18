@@ -88,7 +88,14 @@ def get_chat_page():
 
         button:hover {
             background-color: #1d4ed8;
+            
         }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
