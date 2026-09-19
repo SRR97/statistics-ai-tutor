@@ -68,6 +68,17 @@ def get_chat_page():
             display: inline-block;
         }
 
+        .welcome-message {
+            background-color: #f3f4f6;
+            padding: 14px 16px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .welcome-message p {
+            margin: 6px 0 0;
+        }
+
         .input-area {
             display: flex;
             gap: 8px;
@@ -122,7 +133,12 @@ def get_chat_page():
             Tutor académico de Estadística basado en los materiales de tu curso
         </p>
 
-        <div id="chat"></div>
+        <div id="chat">
+            <div class="welcome-message">
+                <strong>¡Hola! 👋</strong>
+                <p>Puedes preguntarme sobre los temas disponibles en los materiales del curso.</p>
+            </div>
+        </div>
 
         <div class="input-area">
             <input
@@ -139,6 +155,7 @@ def get_chat_page():
         async function askQuestion() {
             const question = document.getElementById("question").value;
             const askButton = document.getElementById("ask-button");
+            const welcomeMessage = document.querySelector(".welcome-message");
 
             if (askButton.disabled) {
                 return;
@@ -146,6 +163,10 @@ def get_chat_page():
 
             if (question.trim() === "") {
                 return;
+            }
+
+            if (welcomeMessage) {
+                welcomeMessage.remove();
             }
 
             askButton.innerText = "Pensando...";
@@ -190,7 +211,7 @@ def get_chat_page():
                 document.getElementById("chat").appendChild(tutorMessage);
                 
                 document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
-                
+
 
                 MathJax.typesetPromise([tutorMessage]);
 
