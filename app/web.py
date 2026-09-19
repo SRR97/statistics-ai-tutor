@@ -169,7 +169,7 @@ def get_chat_page():
                 welcomeMessage.remove();
             }
 
-            askButton.innerText = "Pensando...";
+           
             askButton.disabled = true;
 
             const userMessage = document.createElement("div");
