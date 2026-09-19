@@ -82,6 +82,7 @@ def get_chat_page():
         .input-area {
             display: flex;
             gap: 8px;
+            align-items: flex-end;
         }
 
         #question {
@@ -90,6 +91,7 @@ def get_chat_page():
             border: 1px solid #d1d5db;
             border-radius: 8px;
             resize: none;
+            max-height: 150px;
         }
 
         button {
@@ -146,6 +148,7 @@ def get_chat_page():
                 id="question"
                 placeholder="Escribe tu pregunta aquí"
                 rows="1"
+                oninput="autoResize(this)"
                 onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); askQuestion(); }"
             ></textarea>
             <button id="ask-button" onclick="askQuestion()">Enviar</button>
@@ -153,6 +156,12 @@ def get_chat_page():
     </div>
 
     <script>
+
+        function autoResize(textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+
         async function askQuestion() {
             const question = document.getElementById("question").value;
             const askButton = document.getElementById("ask-button");
@@ -181,6 +190,7 @@ def get_chat_page():
             document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
 
             document.getElementById("question").value = "";
+            autoResize(document.getElementById("question"));
 
             const loadingMessage = document.createElement("div");
             loadingMessage.className = "tutor-message loading-message";
