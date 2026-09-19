@@ -89,6 +89,7 @@ def get_chat_page():
             padding: 12px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
+            resize: none;
         }
 
         button {
@@ -141,12 +142,12 @@ def get_chat_page():
         </div>
 
         <div class="input-area">
-            <input
+            <textarea
                 id="question"
-                type="text"
                 placeholder="Escribe tu pregunta aquí"
-                onkeydown="if(event.key === 'Enter') askQuestion()"
-            >
+                rows="1"
+                onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); askQuestion(); }"
+            ></textarea>
             <button id="ask-button" onclick="askQuestion()">Enviar</button>
         </div>
     </div>
