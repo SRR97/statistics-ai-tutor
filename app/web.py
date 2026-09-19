@@ -215,13 +215,12 @@ def get_chat_page():
 
                 MathJax.typesetPromise([tutorMessage]);
 
-                askButton.innerText = "Enviar";
                 askButton.disabled = false;
                 document.getElementById("question").focus();
 
             } catch (error) {
+                loadingMessage.remove();
                 alert("Ocurrió un error al comunicarse con el tutor.");
-                askButton.innerText = "Enviar";
                 askButton.disabled = false;
             }
         }
