@@ -25,24 +25,36 @@ def generate_rag_answer(query, chunks, chunk_embeddings):
     )
 
     if not relevant_chunks:
-        return "No hay información suficiente en los apuntes proporcionados para responder la pregunta."
-    
+        return {
+            "answer": "No hay información suficiente en los apuntes proporcionados para responder la pregunta.",
+            "sources": []
+        }
+
     context_parts = []
+    sources = []
 
     for result in relevant_chunks:
 
         chunk = result["chunk"]
         document_name = chunk["document"]
         page_number = chunk["page_number"]
-        text = chunk["text"]
-        context_part = f"Documento: {document_name}, página {page_number}:\n{text}"
-        context_parts.append(context_part)
+
+        source = {
+            "document": document_name,
+            "page": page_number
+        }
+
+        if source not in sources:
+            sources.append(source)
+
+            text = chunk["text"]
+            context_part = f"Documento: {document_name}, página {page_number}:\n{text}"
+            context_parts.append(context_part)
         
     context = "\n\n".join(context_parts)
     system_prompt = "Eres un tutor académico de Estadística. Responde utilizando únicamente la información proporcionada en el contexto."
     system_prompt += " Si el contexto no contiene información suficiente para responder la pregunta, indica claramente que no hay información suficiente en los apuntes proporcionados."
-    system_prompt += " Indica siempre el documento y la página o páginas del contexto utilizadas para elaborar la respuesta."
-
+    
     user_prompt = f"Contexto:\n{context}\n\nPregunta:\n{query}"
 
     response = client.responses.create(
@@ -51,7 +63,10 @@ def generate_rag_answer(query, chunks, chunk_embeddings):
         input=user_prompt
     )
 
-    return response.output_text
+    return {
+        "answer": response.output_text,
+        "sources": sources
+    }
 
 if __name__ == "__main__":
     

@@ -66,6 +66,13 @@ def get_chat_page():
             margin-top: 10px;
         }
 
+        .sources-message {
+            margin-top: 6px;
+            padding-left: 14px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
         .loading-message {
         
             display: inline-block;
@@ -235,6 +242,15 @@ def get_chat_page():
                 tutorMessage.className = "tutor-message";
                 tutorMessage.innerHTML = marked.parse(data.answer);
                 document.getElementById("chat").appendChild(tutorMessage);
+
+                if (data.sources.length > 0) {
+                    const sourcesMessage = document.createElement("div");
+                    sourcesMessage.className = "sources-message";
+                    sourcesMessage.innerText = "Fuentes: " + data.sources
+                    .map(source => source.document + " — página " + source.page)
+                    .join(" | ");
+                    document.getElementById("chat").appendChild(sourcesMessage);
+                    }
                 
                 document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
 

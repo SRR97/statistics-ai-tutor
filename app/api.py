@@ -31,4 +31,4 @@ def ask(request: QuestionRequest):
         chunk_embeddings
     )
 
-    return {"answer": answer}
+    return answer
