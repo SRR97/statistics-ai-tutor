@@ -67,7 +67,20 @@ def get_chat_page():
         }
 
         .loading-message {
+        
             display: inline-block;
+        }
+        
+        .loading-dots::after {
+            content: " ...";
+            animation: loadingDots 1.2s infinite;
+        }
+
+        @keyframes loadingDots {
+            0% { content: ""; }
+            33% { content: "."; }
+            66% { content: ".."; }
+            100% { content: "..."; }
         }
 
         .welcome-message {
@@ -196,7 +209,7 @@ def get_chat_page():
 
             const loadingMessage = document.createElement("div");
             loadingMessage.className = "tutor-message loading-message";
-            loadingMessage.innerText = "Pensando...";
+            loadingMessage.innerHTML = 'Pensando<span class="loading-dots"></span>';
             document.getElementById("chat").appendChild(loadingMessage);
 
             try {
