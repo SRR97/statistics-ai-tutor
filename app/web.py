@@ -55,6 +55,8 @@ def get_chat_page():
             padding: 10px 14px;
             border-radius: 12px;
             margin-top: 18px;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         .tutor-message {
