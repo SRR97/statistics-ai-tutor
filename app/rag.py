@@ -54,6 +54,7 @@ def generate_rag_answer(query, chunks, chunk_embeddings):
     context = "\n\n".join(context_parts)
     system_prompt = "Eres un tutor académico de Estadística. Responde utilizando únicamente la información proporcionada en el contexto."
     system_prompt += " Si el contexto no contiene información suficiente para responder la pregunta, indica claramente que no hay información suficiente en los apuntes proporcionados."
+    system_prompt += " Para escribir expresiones matemáticas en LaTeX, usa $...$ para expresiones en línea y $$...$$ para expresiones en bloque. No uses \\(...\\) ni \\[...\\]."
     
     user_prompt = f"Contexto:\n{context}\n\nPregunta:\n{query}"
 

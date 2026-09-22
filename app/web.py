@@ -137,18 +137,19 @@ def get_chat_page():
 
     </style>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension/lib/index.umd.js"></script>
+
 
     <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']]
-            }
-        };
+        marked.use(markedKatex({
+            throwOnError: false
+        }));
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
 </head>
 
 <body>
@@ -253,9 +254,6 @@ def get_chat_page():
                     }
                 
                 document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
-
-
-                MathJax.typesetPromise([tutorMessage]);
 
                 askButton.disabled = false;
                 document.getElementById("question").focus();
