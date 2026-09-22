@@ -64,6 +64,7 @@ def get_chat_page():
             padding: 10px 14px;
             border-radius: 12px;
             margin-top: 10px;
+            margin: 1em 0;
         }
 
         .sources-message {
