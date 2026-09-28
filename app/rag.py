@@ -73,9 +73,9 @@ def generate_rag_answer(query, chunks, chunk_embeddings):
         if source not in sources:
             sources.append(source)
 
-            text = chunk["text"]
-            context_part = f"Documento: {document_name}, página {page_number}:\n{text}"
-            context_parts.append(context_part)
+        text = chunk["text"]
+        context_part = f"Documento: {document_name}, página {page_number}:\n{text}"
+        context_parts.append(context_part)
         
     context = "\n\n".join(context_parts)
     system_prompt = "Eres un tutor académico de Estadística. Responde utilizando únicamente la información proporcionada en el contexto."
