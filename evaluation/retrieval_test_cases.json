@@ -1,0 +1,13 @@
+[
+    {
+        "id": "R001",
+        "query": "¿Qué es el coeficiente de determinación R² y cómo se interpreta?",
+        "in_domain": true,
+        "expected_sources": [
+            {
+                "document": "Clase_3_Análisis_de_regresión.pdf",
+                "page": 11
+            }
+        ]
+    }
+]
