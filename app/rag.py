@@ -3,15 +3,41 @@ from app.document_loader import load_pdfs_from_directory
 from app.text_splitter import chunk_pages
 from app.embeddings import create_embeddings
 from openai import OpenAI
+import pickle
+from pathlib import Path
 
 client = OpenAI()
+
+EMBEDDINGS_CACHE_PATH = "cache/chunk_embeddings.pkl"
 
 def initialize_rag():
     pages = load_pdfs_from_directory("data")
     chunks = chunk_pages(pages, chunk_size=500, overlap=100)
-
     chunk_texts = [chunk["text"] for chunk in chunks]
+
+    cache_path = Path(EMBEDDINGS_CACHE_PATH)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+
+    print(f"¿Existe caché de embeddings?: {cache_path.exists()}")
+
+    if cache_path.exists():
+        with open(cache_path, "rb") as file:
+            cache_data = pickle.load(file)
+
+        chunk_embeddings = cache_data["embeddings"]
+
+        if cache_data["chunk_texts"] == chunk_texts:
+            print("Embeddings cargados desde caché.")
+            return chunks, chunk_embeddings
+
+    print("Generando embeddings y guardando caché...")
     chunk_embeddings = create_embeddings(chunk_texts)
+
+    with open(cache_path, "wb") as file:
+        pickle.dump({
+            "chunk_texts": chunk_texts,
+            "embeddings": chunk_embeddings
+        }, file)
 
     return chunks, chunk_embeddings
 
