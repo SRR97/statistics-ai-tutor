@@ -9,5 +9,16 @@
                 "page": 11
             }
         ]
+    },
+    {
+        "id": "R002",
+        "query": "¿Cómo se construye un intervalo de predicción para una observación futura en regresión lineal?",
+        "in_domain": true,
+        "expected_sources": [
+            {
+                "document": "Clase_3_Análisis_de_regresión.pdf",
+                "page": 5
+            }
+        ]
     }
 ]
