@@ -1,6 +1,7 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import json
+from app.statistical_calculations import calculate_linear_prediction
 
 load_dotenv()
 
@@ -54,4 +55,24 @@ def extract_linear_prediction_parameters(query: str):
         return None
 
     return parameters
+
+def execute_linear_prediction(query: str):
+    parameters = extract_linear_prediction_parameters(query)
+
+    if parameters is None:
+        return None
+
+    result = calculate_linear_prediction(
+        parameters["beta_0"],
+        parameters["beta_1"],
+        parameters["x"]
+    )
+
+    return {
+        "calculation_type": LINEAR_PREDICTION,
+        "parameters": parameters,
+        "result": result
+    }
+
+
     
