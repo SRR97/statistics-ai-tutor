@@ -1,15 +1,30 @@
-# Virtual environment
+# Virtual environments
 .venv/
+.venv_test/
+venv/
 
-# Python cache
+# Python cache / build artifacts
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
 
 # Environment variables and secrets
 .env
+.env.*
+!.env.example
 
-# VS Code local settings
+# Editor / OS local files
 .vscode/
+.idea/
+.DS_Store
+Thumbs.db
 
 # Generated embedding cache
 cache/
