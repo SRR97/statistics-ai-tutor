@@ -75,4 +75,33 @@ def execute_linear_prediction(query: str):
     }
 
 
-    
+def generate_calculation_explanation(query: str, calculation: dict):
+
+    parameters = calculation["parameters"]
+    result = calculation["result"]
+    calculation_context = (
+        f"Pregunta del estudiante: {query}\n"
+        f"Intercepto (beta_0): {parameters['beta_0']}\n"
+        f"Pendiente (beta_1): {parameters['beta_1']}\n"
+        f"Valor de x: {parameters['x']}\n"
+        f"Resultado calculado por Python: {result}"
+    )
+
+    response = client.responses.create(
+        model="gpt-5.4-mini",
+        instructions=(
+            "Actúa como un tutor universitario de Estadística. "
+            "Explica paso a paso la predicción de regresión lineal simple. "
+            "Presenta la fórmula, sustituye los parámetros y explica el resultado. "
+            "Interpreta el valor predicho como la estimación de la variable respuesta "
+            "para el valor de x proporcionado. "
+            "Si no se conoce el contexto de las variables, utiliza una interpretación general. "
+            "Utiliza exactamente el resultado proporcionado por Python. "
+            "No inventes datos ni modifiques los valores recibidos. "
+            "No atribuyas interpretaciones a variables cuyo significado no se conoce. "
+            "Utiliza LaTeX para las expresiones matemáticas."
+        ),
+        input=calculation_context
+    )
+
+    return response.output_text.strip()    
