@@ -81,7 +81,11 @@ The current implementation supports simple linear-regression prediction:
 ŷ = β₀ + β₁x
 ```
 
-The LLM is used only to classify the request and extract the parameters; the actual calculation is executed locally in Python.
+The LLM classifies the request and extracts the required parameters, while Python performs the numerical calculation deterministically.
+
+A separate LLM-based explanation function provides step-by-step mathematical explanations, including formula substitution and statistical interpretation, using the result calculated by Python.
+
+This explanation capability has been implemented and tested independently. Its integration into the FastAPI response flow is planned for a subsequent development stage.
 
 ### Embedding cache
 
@@ -124,8 +128,9 @@ statistics-ai-tutor/
 │   └── web.py
 ├── data/
 │   └── course PDFs
-├── docs/
-│   └── phase-0-project-definition.md
+├── ├── docs/
+│   ├── phase-0-project-definition.md
+│   └── statistics-ai-tutor-demo.png
 ├── evaluation/
 │   ├── evaluate_retrieval.py
 │   └── retrieval_test_cases.json
