@@ -6,6 +6,12 @@ Statistics AI Tutor is an open-source academic assistant that combines semantic 
 
 > **Project status:** Active development. The current version includes multi-document PDF ingestion, chunking, OpenAI embeddings, cosine-similarity retrieval, RAG answer generation with sources, an embedding cache, a FastAPI REST API, a browser-based chat interface, retrieval evaluation, and a local calculation route for simple linear-regression prediction.
 
+## Application preview
+
+The current web interface allows students to ask questions in natural language and receive grounded answers based on the available course material, including mathematical notation and document/page references.
+
+![Statistics AI Tutor demo](docs/statistics-ai-tutor-demo.png)
+
 ## Why this project
 
 The goal is to let a student ask natural-language questions about a Statistics course and receive answers that are grounded in the available material rather than generated from general model knowledge alone.
