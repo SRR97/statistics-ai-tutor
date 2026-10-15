@@ -1,51 +1,106 @@
 # Statistics AI Tutor
 
-Statistics AI Tutor es un asistente académico conversacional para un curso de Estadística. Combina recuperación semántica de notas de clase con generación de respuestas mediante un modelo de lenguaje, y además incluye un enrutador para cálculos estadísticos soportados localmente.
+**An end-to-end Retrieval-Augmented Generation (RAG) application for learning Statistics from course materials.**
 
-> **Estado:** desarrollo activo. La versión actual ya incluye carga de documentos PDF, chunking, embeddings, similitud coseno, recuperación semántica, RAG con fuentes, API FastAPI, interfaz web y una ruta de cálculo para predicción lineal.
+Statistics AI Tutor is an open-source academic assistant that combines semantic retrieval over PDF notes with LLM-generated answers, source references, and deterministic statistical calculations through a FastAPI application.
 
-## Objetivo
+> **Project status:** Active development. The current version includes multi-document PDF ingestion, chunking, OpenAI embeddings, cosine-similarity retrieval, RAG answer generation with sources, an embedding cache, a FastAPI REST API, a browser-based chat interface, retrieval evaluation, and a local calculation route for simple linear-regression prediction.
 
-Permitir que un estudiante formule preguntas en lenguaje natural sobre el material del curso y reciba respuestas contextualizadas, sustentadas en los documentos disponibles y acompañadas de referencias a las fuentes recuperadas.
+## Why this project
 
-## Funcionalidades implementadas
+The goal is to let a student ask natural-language questions about a Statistics course and receive answers that are grounded in the available material rather than generated from general model knowledge alone.
 
-- Carga de múltiples PDF desde `data/`.
-- División del contenido en chunks con solapamiento.
-- Generación de embeddings con `text-embedding-3-small`.
-- Caché local de embeddings para evitar recalcularlos cuando el corpus no cambia.
-- Similitud coseno y recuperación de los chunks más relevantes.
-- Pipeline RAG para generar respuestas a partir del contexto recuperado.
-- Referencias al documento y página utilizados.
-- Detección de consultas que pueden resolverse mediante cálculo local.
-- Predicción lineal con parámetros `beta_0`, `beta_1` y `x`.
-- API con FastAPI.
-- Interfaz web conversacional.
-- Casos de prueba para evaluar recuperación semántica.
+This project also serves as a practical demonstration of:
 
-## Arquitectura
+- end-to-end RAG design without relying on a high-level orchestration framework;
+- document ingestion and preprocessing;
+- vector embeddings and semantic retrieval;
+- retrieval thresholding and ranking;
+- prompt design for grounded generation;
+- REST API development with FastAPI;
+- lightweight frontend integration;
+- deterministic calculation routing alongside generative AI;
+- caching and reproducible retrieval evaluation.
+
+## Architecture
 
 ```text
-Usuario
-  ↓
-Interfaz web
-  ↓
+User
+  |
+  v
+Web Chat Interface
+  |
+  v
 FastAPI
-  ↓
-Router de consulta
-  ├── Cálculo estadístico local
-  └── Pipeline RAG
-        ↓
-     Retrieval
-        ↓
-   Contexto relevante
-        ↓
-       LLM
-        ↓
-Respuesta + fuentes
+  |
+  v
+Query Router
+  |------------------------------|
+  |                              |
+  v                              v
+Local Statistical          RAG Pipeline
+Calculation                      |
+                                 v
+                         Semantic Retrieval
+                                 |
+                                 v
+                          Relevant Context
+                                 |
+                                 v
+                                LLM
+                                 |
+                                 v
+                         Answer + Sources
 ```
 
-## Estructura del proyecto
+## Key features
+
+### Retrieval-Augmented Generation
+
+- Loads multiple PDF documents from `data/`.
+- Splits extracted pages into overlapping chunks.
+- Creates embeddings with OpenAI `text-embedding-3-small`.
+- Computes semantic similarity with cosine similarity.
+- Retrieves the top relevant chunks above a configurable similarity threshold.
+- Builds grounded context for answer generation.
+- Returns document and page references with the response.
+
+### Statistical calculation routing
+
+The application detects when a question requests a supported numerical calculation instead of a document-grounded explanation.
+
+The current implementation supports simple linear-regression prediction:
+
+```text
+ŷ = β₀ + β₁x
+```
+
+The LLM is used only to classify the request and extract the parameters; the actual calculation is executed locally in Python.
+
+### Embedding cache
+
+Document embeddings are stored locally in:
+
+```text
+cache/chunk_embeddings.pkl
+```
+
+If the corpus has not changed, subsequent runs reuse the cached embeddings instead of regenerating them.
+
+### Web interface
+
+A lightweight browser interface is included at `/chat`, with:
+
+- conversational interaction;
+- loading feedback;
+- Markdown rendering;
+- KaTeX mathematical rendering;
+- source references;
+- responsive text input.
+
+The current interface and tutoring responses are Spanish-first because the source course material is in Spanish.
+
+## Project structure
 
 ```text
 statistics-ai-tutor/
@@ -61,67 +116,140 @@ statistics-ai-tutor/
 │   ├── statistical_calculations.py
 │   ├── text_splitter.py
 │   └── web.py
-├── data/                    # Material académico autorizado
+├── data/
+│   └── course PDFs
 ├── docs/
+│   └── phase-0-project-definition.md
 ├── evaluation/
+│   ├── evaluate_retrieval.py
+│   └── retrieval_test_cases.json
 ├── .env.example
 ├── .gitignore
+├── LICENSE
 ├── README.md
 └── requirements.txt
 ```
 
-## Requisitos
+## Tech stack
 
-- Python 3.13.x (probado con Python 3.13.1)
-- Una API key de OpenAI
+**Language & API**
+- Python 3.13
+- FastAPI
+- Uvicorn
+- Pydantic
 
-## Instalación local
+**AI & Retrieval**
+- OpenAI API
+- `gpt-5.4-mini`
+- `text-embedding-3-small`
+- NumPy
+- cosine similarity
+- Retrieval-Augmented Generation (RAG)
+
+**Document processing**
+- PyPDF
+
+**Frontend**
+- HTML / CSS / JavaScript
+- Marked
+- KaTeX
+
+**Development**
+- Git
+- GitHub
+- python-dotenv
+
+## Quick start
+
+### 1. Clone the repository
 
 ```bash
-git clone <URL-DEL-REPOSITORIO>
+git clone https://github.com/SRR97/statistics-ai-tutor.git
 cd statistics-ai-tutor
+```
+
+### 2. Create a virtual environment
+
+```bash
 python -m venv .venv
 ```
 
-En Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
+```
+
+macOS / Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+### 4. Configure the environment
+
+Copy the example environment file:
+
+Windows PowerShell:
+
+```powershell
 Copy-Item .env.example .env
 ```
 
-Luego agrega tu API key en `.env`:
+macOS / Linux:
 
-```text
-OPENAI_API_KEY=tu_api_key
+```bash
+cp .env.example .env
 ```
 
-## Ejecutar la API
+Then add your OpenAI API key to `.env`:
 
-```powershell
+```text
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### 5. Run the API
+
+```bash
 uvicorn app.api:app --host 127.0.0.1 --port 8000
 ```
 
-Después abre:
+Open:
 
-- `http://127.0.0.1:8000/health` para comprobar el estado de la API.
-- `http://127.0.0.1:8000/chat` para utilizar la interfaz conversacional.
+- `http://127.0.0.1:8000/health` — health check
+- `http://127.0.0.1:8000/chat` — conversational interface
 
-### Primera ejecución
+> On the first RAG execution, the application generates embeddings for the available course material. This requires a valid API key and incurs embedding API usage. Later runs reuse the local cache when the corpus has not changed.
 
-El repositorio no publica el archivo de caché de embeddings. En la primera ejecución, `initialize_rag()` procesa los PDF y genera los embeddings del corpus antes de guardar el caché local en `cache/chunk_embeddings.pkl`. Esto requiere una API key válida y genera consumo de la API de embeddings.
+## API
 
-En ejecuciones posteriores, si los textos del corpus no han cambiado, los embeddings se cargan desde caché.
+### `GET /`
 
-## Endpoints principales
+Returns basic API information.
 
-- `GET /` — información básica de la API.
-- `GET /health` — comprobación de estado.
-- `GET /chat` — interfaz web.
-- `POST /ask` — recibe una pregunta y devuelve una respuesta y sus fuentes.
+### `GET /health`
 
-Ejemplo de request:
+Example response:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### `GET /chat`
+
+Serves the browser-based chat interface.
+
+### `POST /ask`
+
+Example request:
 
 ```json
 {
@@ -129,52 +257,104 @@ Ejemplo de request:
 }
 ```
 
-## Tecnologías
+Example response shape:
 
-- Python
-- FastAPI / Uvicorn
-- OpenAI API
-- `text-embedding-3-small`
-- NumPy
-- PyPDF
-- Retrieval-Augmented Generation (RAG)
-- Git / GitHub
+```json
+{
+  "answer": "Respuesta generada a partir del contexto recuperado...",
+  "sources": [
+    {
+      "document": "Clase_2_Análisis_de_regresión.pdf",
+      "page": 3
+    }
+  ]
+}
+```
 
-## Validación reproducible
+## Retrieval design
 
-Antes de preparar esta versión para publicación se comprobó en Windows con Python 3.13.1 que:
+The current retriever:
 
-- `pip install -r requirements.txt` finaliza correctamente en un entorno virtual nuevo.
-- Las dependencias principales importan sin errores.
-- La API inicia correctamente con Uvicorn.
-- `GET /health` responde `ok`.
-- La interfaz `/chat` carga correctamente.
-- La ruta local de predicción lineal devuelve el resultado esperado para un caso de prueba.
-- El flujo RAG completo responde correctamente y muestra las fuentes recuperadas.
+1. creates an embedding for the user query;
+2. compares it with the precomputed chunk embeddings;
+3. filters results below a similarity threshold;
+4. ranks remaining results by cosine similarity;
+5. returns the top results to the RAG pipeline.
 
-## Seguridad
+Current defaults:
 
-- `.env` está excluido de Git.
-- `.venv`, `.venv_test`, cachés de Python y el caché de embeddings están excluidos de Git.
-- Se incluye `.env.example` sin credenciales reales.
-- Antes de publicar se revisó el historial Git disponible buscando patrones típicos de secretos de OpenAI, sin encontrar coincidencias.
+```text
+chunk size:           500
+chunk overlap:        100
+top_k:                3
+similarity threshold: 0.40
+```
 
-## Material académico
+These values are intentionally explicit so the retrieval behavior can be inspected, tested, and improved.
 
-Los documentos incluidos en `data/` forman parte del material utilizado por el proyecto y su difusión/publicación está autorizada.
+## Evaluation
+
+The repository includes a small retrieval-evaluation framework in `evaluation/`.
+
+For each test case, it checks whether the expected source appears in the retrieved results and reports:
+
+- **Hit@1**
+- **Hit@3**
+- **First Relevant Rank**
+- **Reciprocal Rank**
+
+Run it with:
+
+```bash
+python -m evaluation.evaluate_retrieval
+```
+
+The current framework is intentionally lightweight and is designed to be expanded with a larger evaluation set and aggregate metrics.
+
+## Reproducibility and security
+
+Before public release, the project was validated in a clean Windows environment with Python 3.13.1.
+
+The repository is configured so that:
+
+- `.env` is excluded from Git;
+- local virtual environments are excluded;
+- Python caches and generated artifacts are excluded;
+- the generated embedding cache is excluded;
+- `.env.example` contains no real credentials;
+- the available Git history was reviewed for common OpenAI secret patterns before publication.
 
 ## Roadmap
 
-- Ampliar el enrutador de cálculos estadísticos.
-- Añadir más pruebas automáticas del pipeline RAG.
-- Mejorar evaluación cuantitativa de retrieval y calidad de respuesta.
-- Refinar experiencia de usuario de la interfaz web.
-- Documentar despliegue en nube.
+- Expand the deterministic statistical calculation router.
+- Add automated unit and integration tests.
+- Increase the retrieval evaluation dataset.
+- Add aggregate retrieval-quality metrics.
+- Improve answer-quality evaluation.
+- Refine the web interface and user experience.
+- Add deployment documentation.
+- Explore cloud deployment and production-oriented observability.
 
-## Licencia
+## What this project demonstrates
 
-El código fuente de este proyecto se distribuye bajo la **MIT License**. Esto permite usar, copiar, modificar, publicar, distribuir, sublicenciar y vender copias del software, siempre que se conserve el aviso de copyright y la licencia.
+From a portfolio perspective, Statistics AI Tutor demonstrates practical experience with:
 
-Consulta el archivo [`LICENSE`](LICENSE) para ver el texto completo.
+**Python · FastAPI · REST APIs · OpenAI API · LLMs · RAG · Embeddings · Semantic Search · Cosine Similarity · PDF Processing · Prompt Engineering · Retrieval Evaluation · Caching · Statistical Computing · Git/GitHub**
 
-> **Nota sobre el material académico:** los documentos incluidos en `data/` se publican con autorización para su difusión. La licencia MIT se aplica al software del proyecto; cualquier reutilización del material académico debe respetar los términos aplicables a dicho contenido.
+## Academic material
+
+The PDF documents included in `data/` are authorized for use and publication as part of this project.
+
+The MIT License applies to the software. Reuse of the academic material should follow the terms applicable to that content.
+
+## License
+
+This project is released under the **MIT License**.
+
+See [LICENSE](LICENSE) for details.
+
+---
+
+Developed by **Sebastián Ramírez Rentería** — Statistician focused on Data Science, Data Analytics, Predictive Modeling, Business Intelligence, and Applied AI.
+
+[LinkedIn](https://www.linkedin.com/in/sebastian-ramirez-renteria) · [GitHub](https://github.com/SRR97)
