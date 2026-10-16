@@ -322,6 +322,36 @@ python -m evaluation.evaluate_retrieval
 
 The current framework is intentionally lightweight and is designed to be expanded with a larger evaluation set and aggregate metrics.
 
+## Automated tests
+
+The project includes automated unit tests implemented with `pytest`.
+
+The current test suite covers:
+
+- Linear-regression predictions with positive, negative, and decimal values.
+- Validation of invalid numerical inputs.
+- Classification of calculation requests.
+- Extraction and validation of statistical parameters.
+- Handling of malformed JSON and incomplete model responses.
+- Execution of deterministic statistical calculations.
+- Generation of statistical explanations using mocked LLM responses.
+
+### Install development dependencies
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+### Run the tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+The tests use mocks to simulate OpenAI responses, allowing them to run without making real API requests.
+
+The current suite contains 14 automated tests, all passing in the latest local execution.
+
 ## Reproducibility and security
 
 Before public release, the project was validated in a clean Windows environment with Python 3.13.1.
@@ -338,7 +368,7 @@ The repository is configured so that:
 ## Roadmap
 
 - Expand the deterministic statistical calculation router.
-- Add automated unit and integration tests.
+- Expand automated unit tests and introduce integration tests.
 - Increase the retrieval evaluation dataset.
 - Add aggregate retrieval-quality metrics.
 - Improve answer-quality evaluation.
