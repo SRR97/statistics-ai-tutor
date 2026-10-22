@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from app.rag import initialize_rag, generate_rag_answer
-from app.calculation_router import detect_calculation_type, execute_linear_prediction
+from app.calculation_router import (
+    detect_calculation_type,
+    execute_linear_prediction,
+    generate_calculation_explanation,
+)
 from pydantic import BaseModel
 from app.web import get_chat_page
 
@@ -37,8 +41,13 @@ def ask(request: QuestionRequest):
                 "sources": []
             }
 
+        explanation = generate_calculation_explanation(
+            request.question,
+            calculation
+        )
+
         return {
-            "answer": f"El valor predicho es {calculation['result']}.",
+            "answer": explanation,
             "sources": []
         }
 
