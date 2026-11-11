@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MU | Statistical Intelligence</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-symbol">μ</span>
+                <div>
+                    <strong>MU</strong>
+                    <small>Statistical Intelligence</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-navigation" aria-label="Navegación principal">
+                <p class="navigation-label">ESPACIO ACADÉMICO</p>
+                <button type="button" class="nav-link active" onclick="showSection('inicio')">Inicio</button>
+                <button type="button" class="nav-link" onclick="showSection('tutor')">Tutor estadístico</button>
+                <span class="nav-link">Explorar conceptos</span>
+                <span class="nav-link">Herramientas estadísticas</span>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="inicio" data-section>
+            <section class="welcome-section">
+                <p class="eyebrow">TU ESPACIO DE APRENDIZAJE</p>
+                <h1>Bienvenido a MU</h1>
+                <h2>Statistical Intelligence</h2>
+                <p>
+                    Comprende, explora y aplica la Estadística
+                    con el apoyo de inteligencia artificial.
+                </p>
+            </section>
+            <section class="academic-section" aria-labelledby="academic-title">
+    <h2 id="academic-title">¿Qué quieres hacer hoy?</h2>
+
+    <div class="academic-grid">
+        <article class="academic-card">
+            <span class="card-number">01</span>
+            <h3>Tutor estadístico</h3>
+            <p>Resuelve dudas y comprende conceptos con explicaciones fundamentadas en tus materiales académicos.</p>
+        </article>
+
+        <article class="academic-card">
+            <span class="card-number">02</span>
+            <h3>Explorar conceptos</h3>
+            <p>Descubre y refuerza los fundamentos de la Estadística a través de un espacio de aprendizaje organizado.</p>
+        </article>
+
+        <article class="academic-card">
+            <span class="card-number">03</span>
+            <h3>Herramientas estadísticas</h3>
+            <p>Un espacio para realizar cálculos y explorar aplicaciones prácticas de los métodos estadísticos.</p>
+        </article>
+    </div>
+</section>
+        </main>
+
+        <main class="main-content" id="tutor" data-section hidden>
+    <section class="tutor-section">
+        <p class="eyebrow">APRENDIZAJE ASISTIDO POR IA</p>
+        <h1>Tutor estadístico</h1>
+        <p>
+            Formula tus preguntas y recibe explicaciones
+            fundamentadas en los materiales académicos.
+        </p>
+    </section>
+
+<!-- Área de conversación del tutor -->
+<section class="chat-container" aria-label="Conversación con MU">
+
+    <div class="chat-messages" id="chat-messages">
+        <div class="chat-message assistant-message">
+            <p class="message-author">MU · Tutor estadístico</p>
+            <p>
+                ¡Hola! Soy MU, tu asistente de aprendizaje estadístico.
+                Puedes preguntarme sobre conceptos, métodos y aplicaciones
+                de la Estadística.
+            </p>
+        </div>
+    </div>
+
+    <!-- Formulario para enviar preguntas al tutor -->
+<form class="chat-form" id="chat-form">
+
+    <label for="chat-input" class="chat-input-label">
+        Escribe tu pregunta
+    </label>
+
+    <div class="chat-input-wrapper">
+        <textarea
+            id="chat-input"
+            name="question"
+            rows="3"
+            placeholder="Ejemplo: ¿Cuál es la diferencia entre una población y una muestra?"
+            required
+        ></textarea>
+
+        <button type="submit" class="chat-submit">
+            Enviar pregunta
+        </button>
+    </div>
+
+</form>
+
+</section>
+</main>
+    </div>
+
+    <script src="/static/js/navigation.js"></script>
+</body>
+</html>

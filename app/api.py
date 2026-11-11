@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from app.rag import initialize_rag, generate_rag_answer
 from app.calculation_router import (
     detect_calculation_type,
@@ -9,6 +11,7 @@ from pydantic import BaseModel
 from app.web import get_chat_page
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 chunks, chunk_embeddings = initialize_rag()
 
@@ -19,6 +22,7 @@ class QuestionRequest(BaseModel):
 def root():
     return {"message": "Statistics AI Tutor API"}
 
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -26,6 +30,13 @@ def health():
 @app.get("/chat")
 def chat():
     return get_chat_page()
+
+@app.get("/preview")
+def preview():
+    return FileResponse(
+        "app/templates/preview.html",
+        media_type="text/html"
+    )
 
 @app.post("/ask")
 def ask(request: QuestionRequest):

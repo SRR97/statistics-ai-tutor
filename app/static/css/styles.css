@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
+
+:root {
+    --color-background: #071c19;
+    --color-surface: #102b26;
+    --color-primary: #8de4bd;
+    --color-text: #f2f8f5;
+    --color-text-muted: #a9c3b8;
+    --color-border: #28473d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: 'Inter', sans-serif;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 32px;
+}
+
+h1, h2 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    color: var(--color-primary);
+    font-size: 64px;
+    font-weight: 800;
+    margin: 0 0 12px;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0 0 28px;
+}
+
+p {
+    color: var(--color-text-muted);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+/* Estructura principal de MU */
+.app-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+/* Barra lateral */
+.sidebar {
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: 32px 20px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 12px 36px;
+}
+
+.brand-symbol {
+    color: var(--color-primary);
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.sidebar-brand strong,
+.sidebar-brand small {
+    display: block;
+}
+
+.sidebar-brand strong {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 25px;
+}
+
+.sidebar-brand small {
+    color: var(--color-text-muted);
+    font-size: 11px;
+}
+
+.navigation-label {
+    padding: 0 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-link {
+    display: block;
+    padding: 14px 16px;
+    border-radius: 10px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-link.active {
+    background-color: var(--color-border);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Área académica */
+.main-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 100px 8%;
+}
+
+.welcome-section {
+    max-width: 760px;
+}
+
+.eyebrow {
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.welcome-section h1 {
+    font-size: clamp(36px, 4vw, 58px);
+}
+
+.welcome-section h2 {
+    font-size: 24px;
+    color: var(--color-text);
+}
+
+/* Adaptación a pantallas pequeñas */
+@media (max-width: 768px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        padding: 20px;
+    }
+
+    .main-content {
+        padding: 48px 24px;
+    }
+}
+
+/* Sección de funcionalidades académicas */
+.academic-section {
+    margin-top: 72px;
+}
+
+.academic-section > h2 {
+    margin-bottom: 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.academic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.academic-card {
+    min-width: 0;
+    padding: 28px 24px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+}
+
+.card-number {
+    display: inline-block;
+    margin-bottom: 28px;
+    color: var(--color-primary);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.academic-card h3 {
+    margin: 0 0 16px;
+    color: var(--color-text);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    line-height: 1.4;
+}
+
+.academic-card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Tarjetas adaptables */
+@media (max-width: 1100px) {
+    .academic-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .academic-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .academic-section {
+        margin-top: 48px;
+    }
+}
+
+/* Garantizar que las secciones inactivas permanezcan ocultas */
+[data-section][hidden] {
+    display: none !important;
+}
+
+/* Estilos de los botones de navegación */
+.sidebar-navigation button.nav-link {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* Botón correspondiente a la sección activa */
+.sidebar-navigation button.nav-link.active {
+    background-color: var(--color-border);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Efecto al pasar el cursor */
+.sidebar-navigation button.nav-link:hover {
+    color: var(--color-primary);
+}
+
+/* ========================================
+   TUTOR ESTADÍSTICO - ÁREA DE CONVERSACIÓN
+   ======================================== */
+
+.chat-container {
+    margin-top: 48px;
+    width: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    padding: 32px;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.chat-message {
+    max-width: 85%;
+    padding: 22px 26px;
+    border-radius: 14px;
+}
+
+.assistant-message {
+    align-self: flex-start;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+}
+
+.message-author {
+    margin: 0 0 12px;
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.chat-message p:last-child {
+    margin-bottom: 0;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* ========================================
+   TUTOR ESTADÍSTICO - FORMULARIO DEL CHAT
+   ======================================== */
+
+.chat-form {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+}
+
+.chat-input-label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.chat-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#chat-input {
+    width: 100%;
+    min-height: 110px;
+    padding: 18px 20px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+#chat-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.75;
+}
+
+#chat-input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.chat-submit {
+    align-self: flex-end;
+    padding: 14px 24px;
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-submit:hover {
+    background-color: #b3f5d5;
+}
+
+.chat-submit:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+}
